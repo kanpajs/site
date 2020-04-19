@@ -1,7 +1,7 @@
 <html><head><meta name="viewport" content="width=device-width, initial-scale=1"><script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.11.0/highlight.min.js"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.8.0/styles/railscasts.min.css"><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway:300,400,500,600,700"><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Merriweather:900"><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css"><link rel="stylesheet" href="src/style.css"><script>window.addEventListener('load', function () {
     hljs.configure({ languages: ["javascript"] });
     hljs.initHighlighting();
-  });</script></head><body><div><h1 class="center">TRANSFORM</h1><div class="center"><a href="https://selecttransform.github.io/site" class="btn btn-primary">Home</a><a href="https://github.com/kanpajs/kanpa/blob/master/src/kanpa.js" class="btn btn-primary">Github</a><a href="https://selecttransform.github.io/playground/" class="btn btn-primary">Try</a><a href="https://twitter.com/selecttransform" class="btn btn-primary">Twitter</a></div><div class="container"><h1>API</h1><div><h2 id="1-basic">1. Basic</h2>
+  });</script></head><body><div><h1 class="center">TRANSFORM</h1><div class="center"><a href="https://github.com/xiddig/site" class="btn btn-primary">Home</a><a href="https://github.com/xiddig/transform" class="btn btn-primary">Github</a><a href="https://github.com/xiddig/playground/" class="btn btn-primary">Try</a><a href="https://twitter.com/xiddig" class="btn btn-primary">Twitter</a></div><div class="container"><h1>API</h1><div><h2 id="1-basic">1. Basic</h2>
 <p>Use <code>{{ }}</code> notation to fill out a template with data to generate a new JSON</p>
 <div class="row">
 <div class="col">
@@ -34,12 +34,12 @@ var data = {
 <div class="col">
 <blockquote>2. Select and Transform</blockquote>
 <pre><code>
-kanpa.select(template)
+XT.select(template)
     .transform(data)
     .root();
 
 // or
-// kanpa.transform(template, data)
+// XT.transform(template, data)
 </code>
 </pre>
 </div>
@@ -97,12 +97,12 @@ var data = {
 <div class="col">
 <blockquote>2. Select and Transform</blockquote>
 <pre><code>
-  kanpa.select(template)
+  XT.select(template)
     .transform(data)
     .root();
 
 // or
-// kanpa.transform(template, data)
+// XT.transform(template, data)
 </code>
 </pre>
 </div>
@@ -156,12 +156,12 @@ var data = {
 <div class="col">
 <blockquote>2. Select and Transform</blockquote>
 <pre><code>
-  kanpa.select(template)
+  XT.select(template)
     .transform(data)
     .root();
 
 // or
-// kanpa.transform(template, data)
+// XT.transform(template, data)
 </code>
 </pre>
 </div>
@@ -208,12 +208,12 @@ var template = {
 <div class="col">
 <blockquote>2. Select and Transform</blockquote>
 <pre><code>
-  kanpa.select(template)
+  XT.select(template)
     .transform(data)
     .root();
 
 // or
-// kanpa.transform(template, data)
+// XT.transform(template, data)
 </code>
 </pre>
 </div>
@@ -267,12 +267,12 @@ var template = {
 <div class="col">
 <blockquote>2. Select and Transform</blockquote>
 <pre><code>
-  kanpa.select(template)
+  XT.select(template)
     .transform(data)
     .root();
 
 // or
-// kanpa.transform(template, data)
+// XT.transform(template, data)
 </code>
 </pre>
 </div>
@@ -333,12 +333,12 @@ var template = {
 <div class="col">
 <blockquote>2. Select and Transform</blockquote>
 <pre><code>
-  kanpa.select(template)
+  XT.select(template)
     .transform(data)
     .root();
 
 // or
-// kanpa.transform(template, data)
+// XT.transform(template, data)
 </code>
 </pre>
 </div>
@@ -391,12 +391,12 @@ var data = {
 <div class="col">
 <blockquote>2. Select and Transform</blockquote>
 <pre><code>
-  kanpa.select(template)
+  XT.select(template)
     .transform(data)
     .root();
 
 // or
-// kanpa.transform(template, data)
+// XT.transform(template, data)
 </code>
 </pre>
 </div>
@@ -448,12 +448,12 @@ var data = {
 <div class="col">
 <blockquote>2. Select and Transform</blockquote>
 <pre><code>
-  kanpa.select(template)
+  XT.select(template)
     .transform(data)
     .root();
 
 // or
-// kanpa.transform(template, data)
+// XT.transform(template, data)
 </code>
 </pre>
 </div>
@@ -497,12 +497,12 @@ const data = {
   ]
 };
 
-const result = kanpa.select(template)
+const result = XT.select(template)
                  .transform(data)
                  .root()
 
 // or
-// const result = kanpa.transform(template, data)
+// const result = XT.transform(template, data)
 
 </code>
 </pre>
@@ -510,12 +510,12 @@ const result = kanpa.select(template)
 <div class="col">
 <blockquote>2. Select and Transform</blockquote>
 <pre><code>
-  kanpa.select(template)
+  XT.select(template)
     .transform(data)
     .root();
 
 // or
-// kanpa.transform(template, data)
+// XT.transform(template, data)
 </code>
 </pre>
 </div>
@@ -638,12 +638,12 @@ const template = {
 <blockquote>2. Select and Transform</blockquote>
 <pre><code>
 
-const result = kanpa.select(template)
+const result = XT.select(template)
                  .transform(data)
                  .root()
 
 // or
-// const result = kanpa.transform(template, data)
+// const result = XT.transform(template, data)
 
 </code>
 </pre>
@@ -702,9 +702,9 @@ const result = kanpa.select(template)
 <h2 id="1-transform-">1. transform()</h2>
 <p>Select a template or its subtree, and transform data with the selected template.</p>
 <blockquote>
-<p>kanpa.select(<code>TEMPLATE</code>).transform(<code>DATA</code>)</p>
+<p>XT.select(<code>TEMPLATE</code>).transform(<code>DATA</code>)</p>
 </blockquote>
-<pre><code>kanpa.select({
+<pre><code>XT.select({
       "{{#each items}}": {
         "type": "label",
         "text": "{{name}}"
@@ -721,9 +721,9 @@ const result = kanpa.select(template)
 </code></pre><h2 id="2-transformwith-">2. transformWith()</h2>
 <p>Select a data object or its subtree and transform with a template. </p>
 <blockquote>
-<p>kanpa.select(<code>DATA</code>).transformWith(<code>TEMPLATE</code>)</p>
+<p>XT.select(<code>DATA</code>).transformWith(<code>TEMPLATE</code>)</p>
 </blockquote>
-<pre><code>kanpa.select({
+<pre><code>XT.select({
       items: [
         { id: 1, name: "Ja" },
         { id: 2, name: "Ka" },
@@ -754,7 +754,7 @@ const result = kanpa.select(template)
   }
 };
 
-var finalTemplate = kanpa.select(template, function(key, val) {
+var finalTemplate = XT.select(template, function(key, val) {
                           return key === 'type';
                         })
                         .transform({ type: "image" }).root();
@@ -793,7 +793,7 @@ finalTemplate = {
   }
 };
 
-var selection = kanpa.select(data, function(key, val) {
+var selection = XT.select(data, function(key, val) {
   return key === 'url';
 });
 
@@ -859,7 +859,7 @@ var root = transformed.root()
 * };
 */
 
-var transformed = kanpa.select({
+var transformed = XT.select({
   "{{#each items}}": {
     tag: "&lt;a href='{{url}}'&gt;{{text}}&lt;/a&gt;"
   }
@@ -938,7 +938,7 @@ var partial = {
   "type": "label",
   "text": "{{name}}"
 }
-var selected = kanpa.select(template, function(key, val) {
+var selected = XT.select(template, function(key, val) {
   return val === '{{partial}}';
 })
 var finalTemplate = selected.transform({
