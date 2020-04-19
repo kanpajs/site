@@ -1,0 +1,601 @@
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.11.0/highlight.min.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.8.0/styles/railscasts.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css?family=Raleway:300,400,500,600,700"
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css?family=Merriweather:900"
+    />
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css"
+    />
+    <link rel="stylesheet" href="src/style.css" />
+    <script>
+      window.addEventListener("load", function() {
+        hljs.configure({ languages: ["javascript"] });
+        hljs.initHighlighting();
+      });
+    </script>
+  </head>
+  <body>
+    <div>
+      <h1 class="center">Transform</h1>
+      <div class="center">
+        <div>Xiddig Transform</div>
+        <br />
+        <div class="em">JSON Template over JSON</div>
+        <a
+          href="https://github.com/xiddig/transform/transform.js"
+          class="btn btn-primary"
+          >Github</a
+        ><a
+          href="https://github.com/xiddig/playground/"
+          class="btn btn-primary"
+          >Try</a
+        ><a href="https://github.com/xiddig/xiddig" class="btn btn-primary"
+          >Twitter</a
+        >
+      </div>
+      <hr />
+      <img src="src/st.gif" />
+      <div class="container">
+        <hr />
+        <h1>Features</h1>
+        <div class="row">
+          <div class="col">
+            <p><a href="select.html"></a></p>
+            <h2><a href="select.html">1. Select</a></h2>
+            <p></p>
+            <p>
+              Select a JSON object or its subtree that matches your filter
+              function
+            </p>
+            <blockquote>
+              <p>Step 1. Take any JSON object</p>
+            </blockquote>
+            <pre><code>var data = {
+  "links": [
+    { "remote_url": "http://localhost" },
+    { "file_url": "file://documents" },
+    { "remote_url": "https://blahblah.com" }
+  ],
+  "preview": "https://image",
+  "metadata": "This is a link collection"
+}
+</code></pre>
+            <blockquote>
+              <p>
+                Step 2. Find all key/value pairs that match a selector function
+              </p>
+            </blockquote>
+            <pre><code>var sel = Transform.select(data, function(key, val) {
+  return /https?:/.test(val);
+})
+</code></pre>
+            <blockquote>
+              <p>Step 3. Once selected, you can make queries.</p>
+            </blockquote>
+            <pre><code>var keys = sel.keys();
+//  [
+//    "remote_url",
+//    "remote_url",
+//    "preview"
+//  ]
+
+var values = sel.values();
+//  [
+//    "http://localhost",
+//    "https://blahblah.com",
+//    "https://image"
+//  ]
+
+var paths = sel.paths();
+//  [
+//    "[\"links\"]",
+//    "[\"links\"]",
+//    ""
+//  ]
+</code></pre>
+            <p>
+              <a href="select.html" class="rectangle btn btn-primary"
+                >Learn more about Select</a
+              >
+            </p>
+          </div>
+          <div class="col">
+            <p><a href="transform.html"></a></p>
+            <h2><a href="transform.html">2. Transform</a></h2>
+            <p></p>
+            <p>Transform any JSON with a declarative template, also in JSON.</p>
+            <blockquote>
+              <p>Step 1. Take any JSON object</p>
+            </blockquote>
+            <pre><code>var data = {
+  "title": "List of websites",
+  "description": "This is a list of popular websites"
+  "data": {
+    "sites": [{
+      "name": "Google",
+      "url": "https://google.com"
+    }, {
+      "name": "Facebook",
+      "url": "https://facebook.com"
+    }, {
+      "name": "Twitter",
+      "url": "https://twitter.com"
+    }, {
+      "name": "Github",
+      "url": "https://github.com"
+    }]
+  }
+}
+</code></pre>
+            <blockquote>
+              <p>Step 2. Select and transform with a template JSON object</p>
+            </blockquote>
+            <pre><code>var sel = Transform.select(data, function(key, val){
+            return key === 'sites';
+          })
+          .transformWith({
+            "items": {
+              "{{#each sites}}": {
+                "tag": "&lt;a href='{{url}}'&gt;{{name}}&lt;/a&gt;"
+              }
+            }
+          })
+</code></pre>
+            <blockquote>
+              <p>Step 3. Get the result</p>
+            </blockquote>
+            <pre><code>var keys = sel.keys();
+//  [
+//    "tag",
+//    "tag",
+//    "tag",
+//    "tag"
+//  ]
+
+var values = sel.values();
+//  [
+//    "&lt;a href='https://google.com'&gt;Google&lt;/a&gt;",
+//    "&lt;a href='https://facebook.com'&gt;Facebook&lt;/a&gt;",
+//    "&lt;a href='https://twitter.com'&gt;Twitter&lt;/a&gt;",
+//    "&lt;a href='https://github.com'&gt;Github&lt;/a&gt;"
+//  ]
+
+var objects = sel.objects();
+//  [
+//    {
+//      "tag": "&lt;a href='https://google.com'&gt;Google&lt;/a&gt;"
+//    }, {
+//      "tag": "&lt;a href='https://facebook.com'&gt;Facebook&lt;/a&gt;"
+//    }, {
+//      "tag": "&lt;a href='https://twitter.com'&gt;Twitter&lt;/a&gt;"
+//    }, {
+//      "tag": "&lt;a href='https://github.com'&gt;Github&lt;/a&gt;"
+//    }
+//  ]
+
+var root = sel.root();
+//  {
+//    "items": [{
+//      "tag": "&lt;a href='https://google.com'&gt;Google&lt;/a&gt;"
+//    }, {
+//      "tag": "&lt;a href='https://facebook.com'&gt;Facebook&lt;/a&gt;"
+//    }, {
+//      "tag": "&lt;a href='https://twitter.com'&gt;Twitter&lt;/a&gt;"
+//    }, {
+//      "tag": "&lt;a href='https://github.com'&gt;Github&lt;/a&gt;"
+//    }]
+//  }
+</code></pre>
+            <p>
+              <a href="transform.html" class="rectangle btn btn-primary"
+                >Learn more about Transform</a
+              >
+            </p>
+          </div>
+        </div>
+        <hr />
+        <h1>How Does It Work?</h1>
+        <ol>
+          <li>
+            <code>st.js</code> is a library that adds a couple of powerful
+            methods to JavaScript's native JSON.
+          </li>
+          <li>
+            So you can simply use it with the syntax
+            <code>Transform.select(...).transform(...)</code>
+          </li>
+          <li>
+            The library is just a
+            <a
+              href="https://github.com/xiddig/transform/blob/master/transform.js"
+              >single file</a
+            >, made up of <code>stateless functions</code>, with
+            <code>NO dependency</code>.
+          </li>
+          <li>
+            Which makes it effortless to <code>embed anywhere</code> without
+            hassle. (Currently used in various environments including iOS,
+            Android, node.js, browser, etc.)
+          </li>
+        </ol>
+        <hr />
+        <h1>What Can I Use It For?</h1>
+        <div>JSON powers almost everything in the world.</div>
+        <div>
+          Being able to bend any JSON to your will means you can do all kinds of
+          magical things
+        </div>
+        <hr />
+        <h2>1. Declarative JSON API Template</h2>
+        <div>
+          Build JSON using a simple, human-readable, and declarative template
+          instead of manually coding it.
+        </div>
+        <a
+          href="https://github.com/xiddig/api.template"
+          class="btn btn-primary rectangle"
+          >Visit Github</a
+        ><br />
+        <div class="row">
+          <div class="col">
+            <blockquote>
+              <p>Old way: Manually construct object</p>
+            </blockquote>
+            <pre><code>// app.js
+app.get('/', function (req, res) {
+  var response = {}
+  response["current_user"] = {
+    username: "@" + req.user.username,
+    firstname: req.user.name.split(' ')[0],
+    lastname: req.user.name.split(' ')[1]
+  }
+  var transformed_posts = db.posts.map(function(post){
+    return {
+      slug: post.slug
+      permalink: "https://blahblahblah.blahblah/" + post.slug,
+      post_title: post.title,
+      post_content: post.content
+    }
+  })
+  response["posts"] = transformed_posts
+  res.json(response)
+})
+</code></pre>
+          </div>
+          <div class="col">
+            <blockquote>
+              <p>New way: Declarative approach with st.js</p>
+            </blockquote>
+            <pre><code>// app.js
+app.get('/', function (req, res) {
+  res.json(Transform.select(require('./template.json'))
+               .transform({user: req.user, posts: db.posts})
+               .root())
+})
+
+// template.json
+{
+  "current_user": {
+    "username": "@{{user.username}}",
+    "firstname": "{{user.name.split(' ')[0]}}",
+    "lastname": "{{user.name.split(' ')[1]}}"
+  },
+  "posts": {
+    "{{#each posts}}": {
+      "slug": "{{slug}}",
+      "permalink": "https://blahblahblah.blahblah/{{slug}}",
+      "post_title": "{{title}}",
+      "post_content": "{{content}}"
+    }
+  }
+}
+</code></pre>
+          </div>
+        </div>
+        <hr />
+        <h2>2. Parse JSON like never before</h2>
+        <div>
+          Parse JSON anywhere, both frontend and backend, as easy as using
+          <code>JSON.stringify</code> or <code>JSON.parse</code>
+        </div>
+        <a
+          href="https://github.com/xiddig/playground"
+          class="btn btn-primary rectangle"
+          >Visit Github</a
+        ><br />
+        <div class="row"><img class="col" src="src/st.gif" /></div>
+        <hr />
+        <h2>3. JSON as a JSON Query Language</h2>
+        <div>Make complex API queries purely written in JSON.</div>
+        <br />
+        <div>
+          Since templates in Transform are written in JSON, you can pass them around
+          anywhere just like any other data object.
+        </div>
+        <div>
+          Notice we're not creating some new query language, it's just JSON. No
+          convoluted infrastructure to set up!
+        </div>
+        <a
+          href="https://github.com/xiddig/JSONQL"
+          class="btn btn-primary rectangle"
+          >Visit Github</a
+        ><br />
+        <div class="row">
+          <img class="vertical" src="src/jsonql1.png" /><img
+            class="vertical"
+            src="src/jsonql2.png"
+          />
+        </div>
+        <hr />
+        <h2>4. App as Data</h2>
+        <div>Templates are normally used for views</div>
+        <div>
+          But the cool thing about JSON is it can be used to declaratively
+          represent ANYTHING from Model to View to Controller.
+        </div>
+        <br />
+        <div>
+          What if we set <b>executable functions</b> as leaf nodes of an object,
+          select &amp; transform it, and then auto-trigger the resolved
+          function?
+        </div>
+        <div>We have built a router in JSON!</div>
+        <br />
+        <div>
+          Basically, the entire router logic is represented as a piece of data.
+        </div>
+        <br />
+        <div class="row">
+          <div class="col">
+            <blockquote>
+              <p>Browser</p>
+            </blockquote>
+            <pre><code>var rpc = {
+  name: "add",
+  args: [2,3,1]
+}
+fetch("http://localhost:3000", {
+  method: "POST",
+  headers: {
+    'Accept': 'application/json',
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify(rpc)
+).then(function(res) {
+  console.log(res.json());
+})
+</code></pre>
+          </div>
+          <div class="col">
+            <blockquote>
+              <p>Server</p>
+            </blockquote>
+            <pre><code>// router.json
+[{
+  "{{#if 'name' in this}}": [{
+    "{{#if name === 'add'}}": 'add_service'
+  }, {
+    "{{#elseif name === 'subtract'}}": [{
+      "{{#if args.length === 2}}": 'subtract_service'
+    }, {
+      "{{#else}}": 'error_service'
+    }]
+  }]
+}, {
+  "{{#else}}": 'error_service'
+}]
+
+// express server
+app.post('/',  (req, res) =&gt; {
+  const Services = {
+    add_service: function(){
+        return Array.prototype.slice
+                    .call(arguments)
+                    .reduce((a,b) =&gt; {
+                      return a+b;
+                    }, 0)
+    },
+    subtract_service: function() {
+      return arguments[0] - arguments[1]
+    },
+    error_service: function() {
+      return 'error';
+    }
+  }
+  const name = Transform.transform(require('./router.json'), req.body);
+  res.json(Services[name].apply(this, req.body.args));
+});
+</code></pre>
+          </div>
+        </div>
+        <hr />
+        <h2>5. Routerless Server</h2>
+        <div>
+          Let's take the router example from right above. Since our router logic
+          is just a JSON (<code>router.json</code>), we don't even need it on
+          the server side.
+        </div>
+        <div>
+          What if we DON'T keep <code>router.json</code> on the server, but send
+          it from the browser?
+        </div>
+        <div class="row">
+          <div class="col">
+            <blockquote>
+              <p>Browser</p>
+            </blockquote>
+            <pre><code>var router = [{
+  "{{#if 'name' in this}}": [{
+    "{{#if name === 'add'}}": 'add_service'
+  }, {
+    "{{#elseif name === 'subtract'}}": [{
+      "{{#if args.length === 2}}": 'subtract_service'
+    }, {
+      "{{#else}}": 'error_service'
+    }]
+  }]
+}, {
+  "{{#else}}": 'error_service'
+}];
+
+var rpc = {
+  name: "add",
+  args: [2,3,1],
+  router: router
+}
+
+fetch("http://localhost:3000", {
+  method: "POST",
+  headers: {
+    'Accept': 'application/json',
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify(rpc)
+).then(function(res) {
+  console.log(res.json());
+})
+</code></pre>
+          </div>
+          <div class="col">
+            <blockquote>
+              <p>Server</p>
+            </blockquote>
+            <pre><code>// express server
+app.post('/',  (req, res) =&gt; {
+  const Services = {
+    add_service: function(){
+        return Array.prototype.slice
+                    .call(arguments)
+                    .reduce((a,b) =&gt; {
+                      return a+b;
+                    }, 0)
+    },
+    subtract_service: function() {
+      return arguments[0] - arguments[1]
+    },
+    error_service: function() {
+      return 'error';
+    }
+  }
+  const name = Transform.transform(req.body.router, req.body);
+  res.json(Services[name].apply(this, req.body.args));
+});
+</code></pre>
+          </div>
+        </div>
+        <div>What's going on here?</div>
+        <br />
+        <div>We are looking at a server WITHOUT a router.</div>
+        <div>
+          Instead of implementing a router on the server, we send the router
+          itself as part of a network request!
+        </div>
+        <br />
+        <div>
+          This type of JSON-powered portability provides extreme flexibility
+          when creating interfaces for microservices and RPC endpoints
+        </div>
+        <br />
+        <div>
+          Also, remember that you can bake
+          <a href="transform.html">validation, conditionals, loops, etc.</a> all
+          in a single JSON IPC/RPC call, which makes it extremely powerful and
+          efficient.
+        </div>
+        <hr />
+        <h2>6. Build your OWN Turing complete JSON markup language!</h2>
+        <div>
+          If you read this far, you may feel like you could implement
+          practically any programming concept in a declarative manner, using
+          JSON.
+        </div>
+        <div>
+          This is because Transform.js is a low level building block for creating a
+          <b>Turing Complete JSON markup language</b>
+        </div>
+        <br />
+        <div>
+          <code>st.js</code> is the core JSON parser that powers
+          <a href="https://www.jasonette.com">Jasonette</a>, a framework that
+          lets you build native iOS/Android apps by writing nothing but a JSON
+          markup.
+        </div>
+        <a href="https://www.jasonette.com" class="btn btn-primary rectangle"
+          >Check out Jasonette</a
+        >
+        <div class="vid">
+          <div class="video-container">
+            <iframe
+              width="853"
+              height="480"
+              src="https://www.youtube.com/embed/hfevBAAfCMQ"
+              frameborder="0"
+              allowfullscreen="allowfullscreen"
+            ></iframe>
+          </div>
+        </div>
+        <br />
+        <div>But Jasonette is just one implementation.</div>
+        <div>Want to build your own turing complete JSON markup language?</div>
+        <br />
+        <div>
+          Learn more about how Jasonette implements programming concepts by
+          reading
+          <a
+            href="http://blog.jasonette.com/2017/02/15/functional-programming-in-json/"
+            >this blog post</a
+          >, and build your own using Transform.js!
+        </div>
+        <hr />
+        <h1>How to use</h1>
+        <div>
+          <h2 id="in-a-browser">In a browser</h2>
+          <pre><code>&lt;script src="st.js"&gt;&lt;/script&gt;
+&lt;script&gt;
+var parsed = Transform.select({ "items": [1,2,3,4] })
+                .transformWith({
+                  "{{#each items}}": {
+                    "type": "label", "text": "{{this}}"
+                  }
+                })
+                .root();
+&lt;/script&gt;
+</code></pre>
+          <h2 id="in-node-js">In node.js</h2>
+          <blockquote>
+            <p>Install through npm:</p>
+          </blockquote>
+          <pre><code>$ npm install stjs
+</code></pre>
+          <blockquote>
+            <p>Use</p>
+          </blockquote>
+          <pre><code>const Transform = require('@xiddig/transform);
+
+const parsed = Transform.select({ "items": [1,2,3,4] })
+                .transformWith({
+                  "{{#each items}}": {
+                    "type": "label", "text": "{{this}}"
+                  }
+                })
+                .root();
+</code></pre>
+        </div>
+        <hr />
+      </div>
+    </div>
+  </body>
+</html>
